@@ -1,20 +1,25 @@
 "use client";
-import { MapContainer, TileLayer } from "react-leaflet";
 
-export default function Map() {
-  const position = [51.505, -0.09];
+import Map, { GeolocateControl } from "react-map-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 
-  if (typeof window !== undefined) {
-    return (
-      <MapContainer
-        zoom={16}
-        center={position}
-        scrollWheelZoom={true}
-        className="w-screen h-[70vh] diseable-map-selection z-0"
+export default function MapComponent() {
+  return (
+    <div>
+      <Map
+        mapboxAccessToken="pk.eyJ1Ijoia3VjZXJwMjgiLCJhIjoiY2x1c3lkd3liMDc3NDJpbzFmdHRna2YxYyJ9.Fw0lru7f7Er2Dckyd-r4UQ"
+        initialViewState={{
+          longitude: -100,
+          latitude: 40,
+          zoom: 3.5,
+        }}
+        mapStyle="mapbox://styles/mapbox/streets-v11"
       >
-        {" "}
-        <TileLayer url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png" />
-      </MapContainer>
-    );
-  }
+        <GeolocateControl
+          positionOptions={{ enableHighAccuracy: true }}
+          trackUserLocation={true}
+        />
+      </Map>
+    </div>
+  );
 }

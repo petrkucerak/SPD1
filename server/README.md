@@ -7,6 +7,10 @@ yarn # install dependencies
 yarn dev # run dev version
 ```
 
+## Map
+
+Using [map box](https://www.mapbox.com/). Need to add your own code.
+
 ## Structure
 
 - index page
