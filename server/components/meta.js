@@ -5,4 +5,5 @@ const description =
 export const meta = {
   description: description,
   applicationName: title,
+  manifest: `/manifest.json`,
 };
