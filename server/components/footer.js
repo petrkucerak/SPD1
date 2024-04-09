@@ -1,13 +1,24 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
-    <div className="navbar">
+    <div className="navbar text-sm">
       <div className="navbar-start">
-        <a className="navbar-item">Ripple UI</a>
+        <Link href={`/`} className="navbar-item font-bold uppercase">
+          💪&nbsp;Otužilcův&nbsp;deníček
+        </Link>
       </div>
       <div className="navbar-end">
-        <a className="navbar-item">Home</a>
-        <a className="navbar-item">About</a>
-        <a className="navbar-item">Contact</a>
+        <Link
+          href={`https://github.com/petrkucerak/weather-station-with-geolocation`}
+          target="_blank"
+          className="navbar-item"
+        >
+          Repositář projektu
+        </Link>
+        <Link href={`/about`} className="navbar-item">
+          O projektu
+        </Link>
       </div>
     </div>
   );

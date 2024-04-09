@@ -1,13 +1,20 @@
+import Link from "next/link";
+
 export default function Header() {
   return (
     <div className="navbar">
       <div className="navbar-start">
-        <a className="navbar-item">Ripple UI</a>
+        <Link href={`/`} className="navbar-item font-bold uppercase">
+          💪&nbsp;Otužilcův&nbsp;deníček
+        </Link>
       </div>
       <div className="navbar-end">
-        <a className="navbar-item">Home</a>
-        <a className="navbar-item">About</a>
-        <a className="navbar-item">Contact</a>
+        <Link href={`/`} className="navbar-item">
+          Deníček
+        </Link>
+        <Link href={`/`} className="navbar-item">
+          Stanice
+        </Link>
       </div>
     </div>
   );
