@@ -12,7 +12,7 @@ export default function Header() {
         <Link href={`/`} className="navbar-item">
           Deníček
         </Link>
-        <Link href={`/`} className="navbar-item">
+        <Link href={`/stations`} className="navbar-item">
           Stanice
         </Link>
       </div>
