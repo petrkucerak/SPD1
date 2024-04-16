@@ -29,10 +29,4 @@ K&mo1234 # password
 
 ## Software
 
-Uses https://pypi.org/project/raspi-lora/
-
-### Dependecies
-```sh
-pip install raspi-lora
-pip install adafruit-circuitpython-rfm9x
-```
+Uses https://github.com/adafruit/Adafruit_CircuitPython_RFM9x

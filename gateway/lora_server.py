@@ -5,11 +5,8 @@ from datetime import datetime
 
 import adafruit_rfm9x
 
-
 # Define radio parameters.
 RADIO_FREQ_MHZ = 868.0  # Frequency of the radio in Mhz. Must match your
-# module! Can be a value like 915.0, 433.0, etc.
-
 
 # Define pins connected to the chip, use these if wiring up the breakout according to the guide:
 CS = digitalio.DigitalInOut(board.D25)
