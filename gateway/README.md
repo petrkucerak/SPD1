@@ -23,3 +23,6 @@ K&mo1234 # password
 ```
 
 
+## Software
+
+Uses https://pypi.org/project/raspi-lora/
