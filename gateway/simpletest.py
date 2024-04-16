@@ -2,12 +2,13 @@ import board
 import busio
 import digitalio
 import time
+from datetime import datetime
 
 import adafruit_rfm9x
 
 
 # Define radio parameters.
-RADIO_FREQ_MHZ = 915.0  # Frequency of the radio in Mhz. Must match your
+RADIO_FREQ_MHZ = 868.0  # Frequency of the radio in Mhz. Must match your
 # module! Can be a value like 915.0, 433.0, etc.
 
 
@@ -23,14 +24,20 @@ LED.direction = digitalio.Direction.OUTPUT
 spi = busio.SPI(board.D11, MOSI=board.D10, MISO=board.D9)
 
 # Initialze RFM radio
-rfm9x = adafruit_rfm9x.RFM9x(spi, CS, RESET, RADIO_FREQ_MHZ)
+rfm9x = adafruit_rfm9x.RFM9x(spi, CS, RESET, RADIO_FREQ_MHZ, # must specify parameters
+                             preamble_length=8, # The length in bytes of the packet preamble
+                             high_power=True, # Boolean to indicate a high power board
+                             baudrate=5000000, # Baud rate of the SPI connection
+                             agc=False, # Boolean to Enable/Disable Automatic Gain Control - Default=False (AGC off)
+                             crc=True # Boolean to Enable/Disable Cyclic Redundancy Check - Default=True (CRC Enabled)
+                             )
 
 # Note that the radio is configured in LoRa mode so you can't control sync
 # word, encryption, frequency deviation, or other settings!
 
 # You can however adjust the transmit power (in dB).  The default is 13 dB but
 # high power radios like the RFM95 can go up to 23 dB:
-rfm9x.tx_power = 23
+rfm9x.tx_power = 14
 
 # Send a packet.  Note you can only send a packet up to 252 bytes in length.
 # This is a limitation of the radio packet size, so if you need to send larger
@@ -53,7 +60,8 @@ while True:
     if packet is None:
         # Packet has not been received
         LED.value = False
-        print("Received nothing! Listening again...")
+        now = datetime.now()
+        print(now.strftime("%H:%M:%S"), "|", "Received nothing! Listening again...")
     else:
         # Received a packet!
         LED.value = True
