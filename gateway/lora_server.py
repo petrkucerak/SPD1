@@ -1,37 +1,76 @@
-from custom_lora import LoRa, ModemConfig
 import board
+import busio
+import digitalio
+from datetime import datetime
 
-# This is our callback function that runs when a message is received
-def on_recv(payload):
-    print("From:", payload.header_from)
-    print("Received:", payload.message)
-    print("RSSI: {}; SNR: {}".format(payload.rssi, payload.snr))
+import adafruit_rfm9x
 
-# Use chip select 0. GPIO pin 17 will be used for interrupts
-# The address of this device will be set to 2
-lora = LoRa(
-    channel=0, # channel SPI channel to use (either 0 or 1, if your LoRa radio is connected to CE0 or CE1, respectively)
-    interrupt=25, # GPIO pin (BCM-style numbering) to use for the interrupt
-    this_address=2, # The address number (0-254) your device will use when sending and receiving packets.
-    freq=868, # Frequency used by your LoRa radio. Defaults to 915Mhz
-    tx_power=14, # Transmission power level from 5 to 23. Keep this as low as possible. Defaults to 14.
-    modem_config=ModemConfig.Bw500Cr45Sf128, # Modem configuration. See RadioHead docs. Default to Bw125Cr45Sf128.
-    receive_all=True, # Receive messages regardless of the destination address
-    acks=False, # If True, send an acknowledgment packet when a message is received and wait for an acknowledgment when transmitting a message. This is equivalent to using RadioHead's RHReliableDatagram
-    crypto=None # An instance of PyCryptodome Cipher.AES (see above example)
-    )
-lora.on_recv = on_recv
 
-lora.set_mode_rx()
+# Define radio parameters.
+RADIO_FREQ_MHZ = 868.0  # Frequency of the radio in Mhz. Must match your
+# module! Can be a value like 915.0, 433.0, etc.
 
-# Send a message to a recipient device with address 10
-# Retry sending the message twice if we don't get an  acknowledgment from the recipient
-message = "Hello there!"
-status = lora.send_to_wait(message, 10, retries=2)
-if status is True:
-    print("Message sent!")
-else:
-    print("No acknowledgment from recipient")
-    
-# And remember to call this as your program exits...
-lora.close()
+
+# Define pins connected to the chip, use these if wiring up the breakout according to the guide:
+CS = digitalio.DigitalInOut(board.D25)
+RESET = digitalio.DigitalInOut(board.D17)
+
+# Initialize SPI bus.
+spi = busio.SPI(board.D11, MOSI=board.D10, MISO=board.D9)
+
+# Initialze RFM radio
+rfm9x = adafruit_rfm9x.RFM9x(spi, CS, RESET, RADIO_FREQ_MHZ, # must specify parameters
+                             preamble_length=8, # The length in bytes of the packet preamble
+                             high_power=True, # Boolean to indicate a high power board
+                             baudrate=5000000, # Baud rate of the SPI connection
+                             agc=False, # Boolean to Enable/Disable Automatic Gain Control - Default=False (AGC off)
+                             crc=True # Boolean to Enable/Disable Cyclic Redundancy Check - Default=True (CRC Enabled)
+                             )
+
+rfm9x.tx_power = 23
+rfm9x.signal_bandwidth = 500000
+rfm9x.spreading_factor = 7
+rfm9x.coding_rate = 5 # 4/5
+
+# Send a packet.  Note you can only send a packet up to 252 bytes in length.
+# This is a limitation of the radio packet size, so if you need to send larger
+# amounts of data you will need to break it into smaller send calls.  Each send
+# call will wait for the previous one to finish before continuing.
+rfm9x.send(bytes("Hello world!\r\n", "utf-8"))
+print("Sent Hello World message!")
+
+# Wait to receive packets.  Note that this library can't receive data at a fast
+# rate, in fact it can only receive and process one 252 byte packet at a time.
+# This means you should only use this for low bandwidth scenarios, like sending
+# and receiving a single message at a time.
+print("Waiting for packets...")
+
+while True:
+    packet = rfm9x.receive(
+        keep_listening=True,
+        timeout=20.0,
+        with_header=True
+        )
+    # Optionally change the receive timeout from its default of 0.5 seconds:
+    # packet = rfm9x.receive(timeout=5.0)
+    # If no packet was received during the timeout then None is returned.
+    if packet is None:
+        # Packet has not been received
+        # LED.value = False
+        now = datetime.now()
+        print(now.strftime("%H:%M:%S"), "|", "Received nothing! Listening again...")
+    else:
+        # Received a packet!
+        # LED.value = True
+        # Print out the raw bytes of the packet:
+        print("Received (raw bytes): {0}".format(packet))
+        # And decode to ASCII text and print it too.  Note that you always
+        # receive raw bytes and need to convert to a text format like ASCII
+        # if you intend to do string processing on your data.  Make sure the
+        # sending side is sending ASCII data before you try to decode!
+        packet_text = str(packet, "ascii")
+        print("Received (ASCII): {0}".format(packet_text))
+        # Also read the RSSI (signal strength) of the last received message and
+        # print it.
+        rssi = rfm9x.last_rssi
+        print("Received signal strength: {0} dB".format(rssi))
