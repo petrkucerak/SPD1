@@ -16,7 +16,7 @@ CS = digitalio.DigitalInOut(board.D25)
 RESET = digitalio.DigitalInOut(board.D17)
 
 # Define the onboard LED
-LED = digitalio.DigitalInOut(board.)
+LED = digitalio.DigitalInOut(board.D13)
 LED.direction = digitalio.Direction.OUTPUT
 
 # Initialize SPI bus.
