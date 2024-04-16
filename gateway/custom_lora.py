@@ -7,7 +7,7 @@ from random import random
 import RPi.GPIO as GPIO
 import spidev
 
-from .constants import *
+from constants import *
 
 
 class ModemConfig(Enum):
