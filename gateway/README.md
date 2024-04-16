@@ -14,6 +14,9 @@ K&mo1234 # password
 ### Lora shield
 
 - LoRa Gateway RPI/RFI
+- pinout: https://electronilab.co/tienda/modulo-transceptor-rfm96w-hoperf-lora-ultra-long-range-433-mhz/
+- datasheet: https://cdn-learn.adafruit.com/assets/assets/000/031/660/original/sx1272.pdf?1460518722
+
 
 ```
     H
