@@ -6,6 +6,7 @@ LoRa Gateway device runs on Raspberry PI.
 
 ```sh
 ssh pedro@192.168.0.178
+ssh pedro@192.168.137.157
 K&mo1234 # password
 ```
 
