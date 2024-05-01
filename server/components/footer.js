@@ -10,6 +10,9 @@ export default function Footer() {
         </Link>
       </div>
       <div className="navbar-end">
+        <Link href={`/about`} className="navbar-item">
+          O projektu
+        </Link>
         <Link
           href={`https://github.com/petrkucerak/weather-station-with-geolocation`}
           target="_blank"
@@ -22,10 +25,6 @@ export default function Footer() {
             height={20}
             className={"inline-block mr-1"}
           />
-          Repositář projektu
-        </Link>
-        <Link href={`/about`} className="navbar-item">
-          O projektu
         </Link>
       </div>
     </div>
