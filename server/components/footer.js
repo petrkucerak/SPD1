@@ -1,4 +1,5 @@
 import Link from "next/link";
+import IconGitHub from "./icons/github";
 
 export default function Footer() {
   return (
@@ -14,6 +15,13 @@ export default function Footer() {
           target="_blank"
           className="navbar-item"
         >
+          <IconGitHub
+            stroke={`#fff`}
+            strokeWidth={1.8}
+            width={20}
+            height={20}
+            className={"inline-block mr-1"}
+          />
           Repositář projektu
         </Link>
         <Link href={`/about`} className="navbar-item">
