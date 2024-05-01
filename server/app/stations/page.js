@@ -6,7 +6,7 @@ export default function Stations() {
     ssr: false,
   });
   return (
-    <div className="w-full">
+    <div className="w-[90vw]">
       <h1>Stanice</h1>
       <MapWithNoSSR />
     </div>

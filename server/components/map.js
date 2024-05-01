@@ -9,7 +9,7 @@ export default function Map() {
       center={[40.8054, -74.0241]}
       zoom={14}
       scrollWheelZoom={true}
-      className="w-screen h-screen"
+      className="w-full h-[75vh] sm:h-[90vh] rounded-xl"
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
