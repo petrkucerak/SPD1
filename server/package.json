@@ -10,6 +10,7 @@
     "server": "next start -p 8080"
   },
   "dependencies": {
+    "chart.js": "^4.4.2",
     "leaflet": "^1.9.4",
     "leaflet-defaulticon-compatibility": "^0.1.2",
     "leaflet-geosearch": "^3.11.1",
