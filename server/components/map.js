@@ -10,7 +10,7 @@ export default function Map() {
       center={[50.08061, 14.4101822]}
       zoom={16}
       scrollWheelZoom={true}
-      className="w-screen h-screen diseable-map-selection"
+      className="w-full h-[75vh] sm:h-[90vh] rounded-xl"
     >
       <TileLayer
         url={`https://api.mapy.cz/v1/maptiles/outdoor/256/{z}/{x}/{y}?apikey=${MAP_API_KEY}`}
