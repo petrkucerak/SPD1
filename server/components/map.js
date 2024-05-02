@@ -1,4 +1,5 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapConsumer, MapContainer, TileLayer } from "react-leaflet";
+import { MAP_API_KEY } from "./utils";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import "leaflet/dist/leaflet.css";
@@ -6,18 +7,27 @@ import "leaflet/dist/leaflet.css";
 export default function Map() {
   return (
     <MapContainer
-      center={[40.8054, -74.0241]}
-      zoom={14}
+      center={[50.08061, 14.4101822]}
+      zoom={16}
       scrollWheelZoom={true}
-      className="w-full h-[75vh] sm:h-[90vh] rounded-xl"
+      className="w-screen h-screen diseable-map-selection"
     >
       <TileLayer
-        url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'
+        url={`https://api.mapy.cz/v1/maptiles/outdoor/256/{z}/{x}/{y}?apikey=${MAP_API_KEY}`}
+        attribution='<a href="https://api.mapy.cz/copyright" target="_blank" rel="noreferrer">&copy; Seznam.cz a.s. a další</a>'
       />
-      <Marker position={[40.8054, -74.0241]} draggable={true} animate={true}>
-        <Popup>Hey ! you found me</Popup>
-      </Marker>
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.css"
+      />
+      <a
+        href="http://mapy.cz/"
+        target="_blank"
+        rel="noreferrer"
+        className="absolute z-[1000] bottom-0"
+      >
+        <img alt="Mapy.cz logo" src="https://api.mapy.cz/img/api/logo.svg" />
+      </a>
     </MapContainer>
   );
 }

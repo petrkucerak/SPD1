@@ -7,7 +7,6 @@ export default function Stations() {
   });
   return (
     <div className="w-[90vw]">
-      <h1>Stanice</h1>
       <MapWithNoSSR />
     </div>
   );
