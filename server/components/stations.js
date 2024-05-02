@@ -3,6 +3,8 @@ import { useMap } from "react-leaflet";
 export default function Stations() {
   const map = useMap();
 
+  fetch()
+
   // prepare the output string
   const string = `Stanice 1
 `;
