@@ -9,8 +9,8 @@ export default function Stations() {
 
   const statoinPopup = L.popup({
     keepInView: true,
-    offset: L.point(15, 0),
-    autoPanPadding: L.point(15, 15),
+    offset: L.point(20, 0),
+    autoPanPadding: L.point(20, 20),
     closeButton: false,
     className: "",
   }).setContent(string);
@@ -23,7 +23,7 @@ export default function Stations() {
     .addTo(map)
     .bindPopup(statoinPopup)
     .on("click", (e) => {
-      console.log(e);
+      console.log(e); // TODO: remove
     });
 
   return null;
@@ -34,7 +34,7 @@ const stationIcon = L.icon({
   iconSize: [40, 40],
   iconAnchor: [0, 0],
   popupAnchor: [0, 0],
-//   shadowUrl: "/station-icon.png",
-//   shadowSize: [35, 35],
-//   shadowAnchor: [0, 0],
+  //   shadowUrl: "/station-icon.png",
+  //   shadowSize: [35, 35],
+  //   shadowAnchor: [0, 0],
 });
