@@ -95,18 +95,19 @@ while True:
             continue
 
         # check bwp
-        local_bwp = 0
-        for j in range(8):
-            tmp = 0
-            norm = 0x1
-            for i in range(message_end + 2):
-                if packet[i] & norm: tmp +=1
-            if tmp % 2 == 1:
-                local_bwp += norm
-            norm << norm
-        print("MY", local_bwp)
+        # local_bwp = 0
+        # for j in range(8):
+        #     tmp = 0
+        #     norm = 0x1 << j
+        #     print(norm)
+        #     for i in range(message_end + 2):
+        #         if packet[i] & norm == norm: tmp +=1
+        #     if tmp % 2 == 1:
+        #         local_bwp += norm
+        # print("MY", local_bwp)
         local_bwp = bwp
-        print("SOURCE", local_bwp)
+        # print("SOURCE", local_bwp)
+
 
         # send ACK
         ack = bytearray(7)
@@ -118,19 +119,17 @@ while True:
         ack[6] = local_bwp
 
         rfm9x.send(bytes(ack))
-
-        # packet_text = str(packet, "ascii")
-        
-        # print(now.strftime("%H:%M:%S"), "|",
-        #       "Received (ASCII): {0}".format(packet_text))
+    
 
         # save log to file
-        # pathname = f'../logs/{now.strftime("%Y-%m-%d")}.log'
-        # data = packet_text.replace("\n\r\x00", "").split(";")
-        # json_data = {}
-        # for i in data:
-        #     key, value = i.split("=")
-        #     json_data[key] = value
-        # print(json_data)
-        # with open(pathname, "a+") as f:
-        #     f.write(json.dumps(json_data) + ",\n")
+        pathname = f'../logs/{now.strftime("%Y-%m-%d")}.log'
+        data = message.replace("\n\r\x00", "").split(";")
+        print(data)
+        json_data = {}
+        for i in data:
+            key, value = i.split("=")
+            json_data[key] = value
+        json_data["time"] = now.strftime("%Y-%m-%d %H:%M:%S")
+        print(json_data)
+        with open(pathname, "a+") as f:
+            f.write(json.dumps(json_data) + ",\n")
