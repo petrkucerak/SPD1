@@ -56,6 +56,7 @@ while True:
     # packet = rfm9x.receive(timeout=5.0)
     # If no packet was received during the timeout then None is returned.
     now = datetime.now()
+    rfm9x.send(bytes("TEST\r\n", "utf-8"))
     if packet is None:
         # Packet has not been received
         print(now.strftime("%H:%M:%S"), "|",
@@ -69,20 +70,25 @@ while True:
 
         # Packet formate
         # | 2B - message_id (binary) | message_size (binary) | message (string) | checksum (binary modulo 255) | parita
-        message_id = int.from_bytes(packet[:2], byteorder='little', signed=False)
-        message_size = int.from_bytes(packet[2:4], byteorder='little', signed=False)
-        message_end = message_size + 4
-        message = int.from_bytes(packet[4:message_end], byteorder='little', signed=False)
-        checksum = int.from_bytes(packet[message_end:message_end+1], byteorder='little', signed=False)
-        bwp = int.from_bytes(packet[message_end+1:message_end+2], byteorder='little', signed=False)
+        print(packet)
+        message_id = int.from_bytes(packet[:2], byteorder='big', signed=False)
+        message_size = int.from_bytes(packet[2:4], byteorder='big', signed=False)
+        message_end = message_size - 2
+        message = str(packet[4:message_end], "utf-8")
+        checksum = int.from_bytes(packet[message_end:message_end+1], byteorder='big', signed=False)
+        bwp = int.from_bytes(packet[message_end+1:message_end+2], byteorder='big', signed=False)
 
 
-        print(message_id, message_size, message_size, message_end, message, checksum, bwp)
+        print("Message ID:", message_id)
+        print("Message size:", message_size)
+        print("Message:", message)
+        print("Checksum:", checksum)
+        print("Bwp:", bwp)
 
-        packet_text = str(packet, "ascii")
+        # packet_text = str(packet, "ascii")
         
-        print(now.strftime("%H:%M:%S"), "|",
-              "Received (ASCII): {0}".format(packet_text))
+        # print(now.strftime("%H:%M:%S"), "|",
+        #       "Received (ASCII): {0}".format(packet_text))
 
         # save log to file
         # pathname = f'../logs/{now.strftime("%Y-%m-%d")}.log'
