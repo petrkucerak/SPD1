@@ -9,6 +9,7 @@ import {
   LineElement,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
+import gpsToUtc from "./gps2utc";
 
 // Register ChartJS components using ChartJS.register
 ChartJS.register(
@@ -19,7 +20,7 @@ ChartJS.register(
   Tooltip
 );
 
-export default function Graph({ data }) {
+export default function Graph({ data, type, label, title }) {
   ChartJS.register(CategoryScale /* ... */);
 
   return (
@@ -30,7 +31,7 @@ export default function Graph({ data }) {
           plugins: {
             title: {
               display: true,
-              text: "Chart.js Line Chart - Cubic interpolation mode",
+              text: title != undefined ? title : "title",
             },
           },
           interaction: {
@@ -47,7 +48,7 @@ export default function Graph({ data }) {
               display: true,
               title: {
                 display: true,
-                text: "Value",
+                text: label != undefined ? label : "value",
               },
               suggestedMin: -10,
               suggestedMax: 200,
@@ -55,26 +56,36 @@ export default function Graph({ data }) {
           },
         }}
         data={{
-          labels: [
-            "2023-01",
-            "2023-02",
-            "2023-03",
-            "2023-04",
-            "2023-05",
-            "2023-06",
-            "2023-07",
-          ],
-          datasets: [
-            {
-              label: "Cubic interpolation",
-              data: [100, 120, 115, 134, 168, 132, 200],
-              backgroundColor: "red",
-              borderColor: "red",
-              fill: true,
-              cubicInterpolationMode: "monotone",
-              tension: 0.4,
-            },
-          ],
+          labels: data
+            .map((item) => /*gpsToUtc(item.gps_time)*/ item.gps_time)
+            .slice(-24),
+
+          datasets:
+            type === "light"
+              ? [
+                  {
+                    label: "Světelnost",
+                    data: data.map((item) => item.light).slice(-24),
+                    backgroundColor: "red",
+                    borderColor: "red",
+                    fill: true,
+                    cubicInterpolationMode: "monotone",
+                    tension: 0.4,
+                  },
+                ]
+              : type === "temperature"
+              ? [
+                  {
+                    label: "Teplota vody",
+                    data: data.map((item) => item.t_water).slice(-24),
+                    backgroundColor: "blue",
+                    borderColor: "blue",
+                    fill: true,
+                    cubicInterpolationMode: "monotone",
+                    tension: 0.4,
+                  },
+                ]
+              : [],
         }}
       />
     </div>

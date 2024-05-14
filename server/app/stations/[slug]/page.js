@@ -22,14 +22,14 @@ export default function Page({ params }) {
   const station_data = data.filter(
     (record) => record.gps_lat == coord[1] && record.gps_lan == coord[0]
   );
-  console.log(station_data);
   return (
     <div className="w-[90vw] max-w-[800px]">
       <h1>Stanice</h1>
       <span>
         {coord[0]} {coord[1]}
       </span>
-      <Graph />
+      <Graph data={station_data} type="light" title={"Světelnost"} label={"Světelnost"} />
+      <Graph data={station_data} type="temperature" title={"Teplota"} label={"Teplota"} />
     </div>
   );
 }
