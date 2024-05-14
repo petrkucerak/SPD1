@@ -12,7 +12,7 @@ export async function generateStaticParams() {
     }
   }
   return stations.map((station) => ({
-    slug: `${station.lan}-${station.lat}`,
+    slug: `${station.lat}-${station.lan}`,
   }));
 }
 
@@ -20,12 +20,12 @@ export default function Page({ params }) {
   const data = JSON.parse(fs.readFileSync("public/tmp/data_logs.json"));
   const coord = params.slug.split("-");
   const station_data = data.filter(
-    (record) => record.gps_lat == coord[1] && record.gps_lan == coord[0]
+    (record) => record.gps_lat == coord[0] && record.gps_lan == coord[1]
   );
   return (
     <div className="w-[90vw] max-w-[800px]">
-      <h1>Stanice</h1>
-      <span>
+      <h1 className="text-2xl font-bold">Stanice</h1>
+      <span className="font-semibold">
         {coord[0]} {coord[1]}
       </span>
       <Graph data={station_data} type="light" title={"Světelnost"} label={"Světelnost"} />
