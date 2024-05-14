@@ -69,13 +69,12 @@ while True:
 
         # Packet formate
         # | 2B - message_id (binary) | message_size (binary) | message (string) | checksum (binary modulo 255) | parita
-        packet = 0x0102
-        message_id = int.from_bytes(packet[:2])
-        message_size = int.from_bytes(packet[2:4])
+        message_id = int.from_bytes(packet[:2], byteorder='little', signed=False)
+        message_size = int.from_bytes(packet[2:4], byteorder='little', signed=False)
         message_end = message_size + 4
-        message = int.from_bytes(packet[4:message_end])
-        checksum = int.from_bytes(packet[message_end:message_end+1])
-        bwp = int.from_bytes(packet[message_end+1:message_end+2])
+        message = int.from_bytes(packet[4:message_end], byteorder='little', signed=False)
+        checksum = int.from_bytes(packet[message_end:message_end+1], byteorder='little', signed=False)
+        bwp = int.from_bytes(packet[message_end+1:message_end+2], byteorder='little', signed=False)
 
 
         print(message_id, message_size, message_size, message_end, message, checksum, bwp)
