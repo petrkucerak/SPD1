@@ -17,9 +17,18 @@ export async function generateStaticParams() {
 }
 
 export default function Page({ params }) {
+  const data = JSON.parse(fs.readFileSync("public/tmp/data_logs.json"));
+  const coord = params.slug.split("-");
+  const station_data = data.filter(
+    (record) => record.gps_lat == coord[1] && record.gps_lan == coord[0]
+  );
+  console.log(station_data);
   return (
     <div className="w-[90vw] max-w-[800px]">
-      <h1>Hello</h1>
+      <h1>Stanice</h1>
+      <span>
+        {coord[0]} {coord[1]}
+      </span>
       <Graph />
     </div>
   );
