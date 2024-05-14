@@ -95,18 +95,14 @@ while True:
             continue
 
         # check bwp
-        # local_bwp = 0
-        # for j in range(8):
-        #     tmp = 0
-        #     norm = 0x1 << j
-        #     print(norm)
-        #     for i in range(message_end + 2):
-        #         if packet[i] & norm == norm: tmp +=1
-        #     if tmp % 2 == 1:
-        #         local_bwp += norm
-        # print("MY", local_bwp)
-        local_bwp = bwp
-        # print("SOURCE", local_bwp)
+        bwp_local = 0
+        for i in range(message_size - 1):
+            bwp_local = bwp_local ^ packet[i]
+        print("Bitwise parity local:", bwp_local)
+
+        if(bwp_local != bwp):
+            print("ERROR: wrong bwp")
+            continue
 
 
         # send ACK
@@ -116,7 +112,7 @@ while True:
         ack[3] = 0x43 # 'C'
         ack[4] = 0x4B # 'K'
         ack[5] = checksum_local
-        ack[6] = local_bwp
+        ack[6] = bwp_local
 
         rfm9x.send(bytes(ack))
     
