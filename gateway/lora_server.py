@@ -85,6 +85,12 @@ while True:
         print("Checksum:", checksum)
         print("Bwp:", bwp)
 
+        # calcule checksum
+        for i in range(message_end + 1):
+            checksum_local = int(packet[i])
+        checksum_local = checksum_local % 256
+        print("Checksum local:", checksum_local)
+
         # packet_text = str(packet, "ascii")
         
         # print(now.strftime("%H:%M:%S"), "|",
