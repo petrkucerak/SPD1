@@ -56,7 +56,6 @@ while True:
     # packet = rfm9x.receive(timeout=5.0)
     # If no packet was received during the timeout then None is returned.
     now = datetime.now()
-    rfm9x.send(bytes("TEST\r\n", "utf-8"))
     if packet is None:
         # Packet has not been received
         print(now.strftime("%H:%M:%S"), "|",
@@ -90,6 +89,14 @@ while True:
             checksum_local = int(packet[i])
         checksum_local = checksum_local % 256
         print("Checksum local:", checksum_local)
+
+        if(checksum_local != checksum):
+            print("ERROR: wrong checksum")
+            continue
+
+        # send ACK
+        ack = bytearray()
+        rfm9x.send(bytes(message_id+'ACK'+checksum_local, "utf-8"))
 
         # packet_text = str(packet, "ascii")
         
