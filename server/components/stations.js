@@ -1,6 +1,6 @@
 import { useMap } from "react-leaflet";
 
-const url = "/tmp/data_logs.json";
+const url = "/api/stations";
 
 export default function Stations() {
   const map = useMap();
@@ -8,24 +8,17 @@ export default function Stations() {
   fetch(url)
     .then((res) => res.json())
     .then((data) => {
-      let stations = [];
-      let stations_text = [];
-      for (let i = 0; i < data.length; ++i) {
-        if (!stations_text.includes(`${data[i].GN},${data[i].gps_lan}`)) {
-          stations.push({ lat: data[i].gps_lat, lan: data[i].gps_lan });
-          stations_text.push(`${data[i].gps_lat},${data[i].gps_lan}`);
-        }
-      }
-
+      const stations = data.data;
+      console.log(stations);
       stations.map((station) => {
         // prepare the output string
         const string = `
         <div class="card text-white">
           <div class="card-body">
             <h2 class="card-header">Stanice</h1>
-            <p class="text-content2">${station.lat} ${station.lan}</p>
+            <p class="text-content2">${station.GN} ${station.GE}</p>
             <div class="card-footer">
-              <a href='/stations/${station.lat}-${station.lan}'>
+              <a href='/stations/${station.GN}-${station.GE}'>
                 <button class="btn btn-solid-secondary font-semibold">Naměřená data</button>
               </a>
             </div>
@@ -40,7 +33,7 @@ export default function Stations() {
           className: "",
         }).setContent(string);
 
-        L.marker([station.lat, station.lan], {
+        L.marker([station.GN, station.GE], {
           icon: stationIcon,
           title: "Stanice",
           alt: `Stanice`,
@@ -54,9 +47,7 @@ export default function Stations() {
     })
     .catch((err) => console.log(err));
 
-  return (
-    null
-  );
+  return null;
 }
 
 const stationIcon = L.icon({

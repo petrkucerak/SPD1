@@ -8,8 +8,8 @@ import Stations from "./stations";
 export default function Map() {
   return (
     <MapContainer
-      center={[50.0517678, 14.500]}
-      zoom={15}
+      center={[50.08, 14.450]}
+      zoom={11}
       scrollWheelZoom={true}
       className="w-full h-[75vh] sm:h-[90vh] rounded-xl"
     >
