@@ -18,18 +18,20 @@ RESET = digitalio.DigitalInOut(board.D17)
 spi = busio.SPI(board.D11, MOSI=board.D10, MISO=board.D9)
 
 # Initialze RFM radio
-rfm9x = adafruit_rfm9x.RFM9x(spi, CS, RESET, RADIO_FREQ_MHZ, # must specify parameters
-                             preamble_length=8, # The length in bytes of the packet preamble
-                             high_power=True, # Boolean to indicate a high power board
-                             baudrate=5000000, # Baud rate of the SPI connection
-                             agc=False, # Boolean to Enable/Disable Automatic Gain Control - Default=False (AGC off)
-                             crc=True # Boolean to Enable/Disable Cyclic Redundancy Check - Default=True (CRC Enabled)
+rfm9x = adafruit_rfm9x.RFM9x(spi, CS, RESET, RADIO_FREQ_MHZ,  # must specify parameters
+                             preamble_length=8,  # The length in bytes of the packet preamble
+                             high_power=True,  # Boolean to indicate a high power board
+                             baudrate=5000000,  # Baud rate of the SPI connection
+                             # Boolean to Enable/Disable Automatic Gain Control - Default=False (AGC off)
+                             agc=False,
+                             # Boolean to Enable/Disable Cyclic Redundancy Check - Default=True (CRC Enabled)
+                             crc=True
                              )
 
 rfm9x.tx_power = 23
 rfm9x.signal_bandwidth = 500000
 rfm9x.spreading_factor = 7
-rfm9x.coding_rate = 5 # 4/5
+rfm9x.coding_rate = 5  # 4/5
 
 # Send a packet.  Note you can only send a packet up to 252 bytes in length.
 # This is a limitation of the radio packet size, so if you need to send larger
@@ -49,34 +51,39 @@ if not os.path.exists("../logs"):
     os.makedirs("../logs")
 
 while True:
-    packet = rfm9x.receive(
-        keep_listening=True,
-        timeout=20.0,
-        with_header=True
-        )
+    packet = rfm9x.receive(keep_listening=True, timeout=20.0, with_header=True)
     # Optionally change the receive timeout from its default of 0.5 seconds:
     # packet = rfm9x.receive(timeout=5.0)
     # If no packet was received during the timeout then None is returned.
     now = datetime.now()
     if packet is None:
         # Packet has not been received
-        # LED.value = False
-        print(now.strftime("%H:%M:%S"), "|", "Received nothing! Listening again...")
+        print(now.strftime("%H:%M:%S"), "|",
+              "Received nothing! Listening again...")
     else:
         # Received a packet!
-        # LED.value = True
-        # Print out the raw bytes of the packet:
-        print(now.strftime("%H:%M:%S"), "|", "Received (raw bytes): {0}".format(packet))
-        # And decode to ASCII text and print it too.  Note that you always
-        # receive raw bytes and need to convert to a text format like ASCII
-        # if you intend to do string processing on your data.  Make sure the
-        # sending side is sending ASCII data before you try to decode!
+
+        print(now.strftime("%H:%M:%S"), "|",
+              "Received (raw bytes): {0}".format(packet))
+        
+
+        # Packet formate
+        # | 2B - message_id (binary) | message_size (binary) | message (string) | checksum (binary modulo 255) | parita
+        packet = 0x0102
+        message_id = int.from_bytes(packet[:2])
+        message_size = int.from_bytes(packet[2:4])
+        message_end = message_size + 4
+        message = int.from_bytes(packet[4:message_end])
+        checksum = int.from_bytes(packet[message_end:message_end+1])
+        bwp = int.from_bytes(packet[message_end+1:message_end+2])
+
+
+        print(message_id, message_size, message_size, message_end, message, checksum, bwp)
+
         packet_text = str(packet, "ascii")
-        print(now.strftime("%H:%M:%S"), "|", "Received (ASCII): {0}".format(packet_text))
-        # Also read the RSSI (signal strength) of the last received message and
-        # print it.
-        rssi = rfm9x.last_rssi
-        print(now.strftime("%H:%M:%S"), "|", "Received signal strength: {0} dB".format(rssi))
+        
+        print(now.strftime("%H:%M:%S"), "|",
+              "Received (ASCII): {0}".format(packet_text))
 
         # save log to file
         pathname = f'../logs/{now.strftime("%Y-%m-%d")}.log'
@@ -87,4 +94,4 @@ while True:
             json_data[key] = value
         print(json_data)
         with open(pathname, "a+") as f:
-            f.write(json.dumps(json_data)+",\n")
+            f.write(json.dumps(json_data) + ",\n")
