@@ -65,7 +65,7 @@ export default function Graph({ data, type, label, title }) {
               ? [
                   {
                     label: "Světelnost",
-                    data: data.map((item) => item.light).slice(-24),
+                    data: data.map((item) => item.Lo).slice(-24),
                     backgroundColor: "red",
                     borderColor: "red",
                     fill: true,
@@ -77,7 +77,7 @@ export default function Graph({ data, type, label, title }) {
               ? [
                   {
                     label: "Teplota vody",
-                    data: data.map((item) => item.t_water).slice(-24),
+                    data: data.map((item) => item.Tw).slice(-24),
                     backgroundColor: "blue",
                     borderColor: "blue",
                     fill: true,

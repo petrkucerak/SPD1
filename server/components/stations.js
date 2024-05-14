@@ -11,7 +11,7 @@ export default function Stations() {
       let stations = [];
       let stations_text = [];
       for (let i = 0; i < data.length; ++i) {
-        if (!stations_text.includes(`${data[i].gps_lat},${data[i].gps_lan}`)) {
+        if (!stations_text.includes(`${data[i].GN},${data[i].gps_lan}`)) {
           stations.push({ lat: data[i].gps_lat, lan: data[i].gps_lan });
           stations_text.push(`${data[i].gps_lat},${data[i].gps_lan}`);
         }

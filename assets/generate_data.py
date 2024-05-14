@@ -2,6 +2,7 @@ import sys
 import json
 import numpy as np
 import random
+import datetime
 
 
 def make_tmp_hop(temperature: float, ub: float, lb: float):
@@ -26,42 +27,42 @@ path = sys.argv[2]
 w_temperature = 4.71  # start water temperature
 a_temperature = 8.25  # start air temperature
 moist_air = 57.4  # start air moist
-start_time = 1388139018
+start_time = datetime.datetime.now()
 
 w_temperature_2 = 5.71  # start water temperature
 a_temperature_2 = 9.25  # start air temperature
 moist_air_2 = 63.4  # start air moist
-start_time_2 = 1388139018
+start_time_2 = datetime.datetime.now()
 
 data = []
 for i in range(records):
     w_temperature = make_tmp_hop(w_temperature, lb=4, ub=20)
     a_temperature = make_tmp_hop(a_temperature, ub=30, lb=-8)
     moist_air = make_tmp_hop(a_temperature, ub=98, lb=0)
-    start_time += 3600
+    start_time += datetime.timedelta(seconds=11)
     data.append({
-        't_water': w_temperature,
-        "t_air": a_temperature,
-        "moist_air": moist_air,
-        "light": random.randint(1000, 6000),
-        "gps_lat": 50.0517678,
-        "gps_lan": 14.4965397,
-        "gps_time": start_time
+        'Tw': w_temperature,
+        "Ta": a_temperature,
+        "Ma": moist_air,
+        "Lo": random.randint(1000, 6000),
+        "GN": 50.0517678,
+        "GE": 14.4965397,
+        "time": str(start_time)
     })
 
     w_temperature_2 = make_tmp_hop(w_temperature_2, lb=4, ub=20)
     a_temperature_2 = make_tmp_hop(a_temperature_2, ub=30, lb=-8)
     moist_air_2 = make_tmp_hop(a_temperature_2, ub=98, lb=0)
-    start_time_2 += 3600
+    start_time_2 += datetime.timedelta(seconds=11)
 
     data.append({
-        't_water': w_temperature_2,
-        "t_air": a_temperature_2,
-        "moist_air": moist_air_2,
-        "light": random.randint(1000, 6000),
-        "gps_lat": 50.0518297,
-        "gps_lan": 14.5015125,
-        "gps_time": start_time_2
+        'Tw': w_temperature_2,
+        "Ta": a_temperature_2,
+        "Ma": moist_air_2,
+        "Lo": random.randint(1000, 6000),
+        "GN": 50.0518297,
+        "GE": 14.5015125,
+        "time": str(start_time_2)
     })
 
 with open(path, "w+") as f:
