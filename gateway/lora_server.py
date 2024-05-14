@@ -86,12 +86,12 @@ while True:
               "Received (ASCII): {0}".format(packet_text))
 
         # save log to file
-        pathname = f'../logs/{now.strftime("%Y-%m-%d")}.log'
-        data = packet_text.replace("\n\r\x00", "").split(";")
-        json_data = {}
-        for i in data:
-            key, value = i.split("=")
-            json_data[key] = value
-        print(json_data)
-        with open(pathname, "a+") as f:
-            f.write(json.dumps(json_data) + ",\n")
+        # pathname = f'../logs/{now.strftime("%Y-%m-%d")}.log'
+        # data = packet_text.replace("\n\r\x00", "").split(";")
+        # json_data = {}
+        # for i in data:
+        #     key, value = i.split("=")
+        #     json_data[key] = value
+        # print(json_data)
+        # with open(pathname, "a+") as f:
+        #     f.write(json.dumps(json_data) + ",\n")
