@@ -94,9 +94,18 @@ while True:
             print("ERROR: wrong checksum")
             continue
 
+        local_bwp = bwp
+
         # send ACK
-        ack = bytearray()
-        rfm9x.send(bytes(message_id+'ACK'+checksum_local, "utf-8"))
+        ack = bytearray(7)
+        ack[:2] = packet[:2]
+        ack[2] = 0x41 # 'A'
+        ack[3] = 0x43 # 'C'
+        ack[4] = 0x4B # 'K'
+        ack[5] = checksum_local
+        ack[6] = local_bwp
+
+        rfm9x.send(bytes(ack))
 
         # packet_text = str(packet, "ascii")
         
