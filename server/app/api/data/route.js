@@ -5,7 +5,6 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const GN = searchParams.get("GN");
   const GE = searchParams.get("GE");
-  console.log(GN, GE);
 
   const path = "../logs";
   const files = fs.readdirSync(path).sort();
