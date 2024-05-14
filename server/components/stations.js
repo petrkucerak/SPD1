@@ -19,7 +19,11 @@ export default function Stations() {
 
       stations.map((station) => {
         // prepare the output string
-        const string = `<h1 class="font-semibold uppercase">Stanice</h1> <span class="font-mono">${station.lat} ${station.lan}</span>`;
+        const string = `
+        <h1 class="font-semibold uppercase">Stanice</h1>
+        <p class="font-mono">${station.lat} ${station.lan}</p>
+        <a href='/stations/${station.lan}-${station.lat}'>Naměřená data</a>
+        `;
 
         const statoinPopup = L.popup({
           keepInView: true,
@@ -43,7 +47,9 @@ export default function Stations() {
     })
     .catch((err) => console.log(err));
 
-  return null;
+  return (
+    null
+  );
 }
 
 const stationIcon = L.icon({
