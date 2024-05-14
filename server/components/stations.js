@@ -20,10 +20,17 @@ export default function Stations() {
       stations.map((station) => {
         // prepare the output string
         const string = `
-        <h1 class="font-semibold uppercase">Stanice</h1>
-        <p class="font-mono">${station.lat} ${station.lan}</p>
-        <a href='/stations/${station.lan}-${station.lat}'>Naměřená data</a>
-        `;
+        <div class="card text-white">
+          <div class="card-body">
+            <h2 class="card-header">Stanice</h1>
+            <p class="text-content2">${station.lat} ${station.lan}</p>
+            <div class="card-footer">
+              <a href='/stations/${station.lan}-${station.lat}'>
+                <button class="btn btn-solid-secondary">Naměřená data</button>
+              </a>
+            </div>
+          </div>
+        </div>`;
 
         const statoinPopup = L.popup({
           keepInView: true,
