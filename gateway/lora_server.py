@@ -5,7 +5,6 @@ from datetime import datetime
 import os
 import json
 import time
-
 import adafruit_rfm9x
 
 # Define radio parameters.
@@ -42,25 +41,18 @@ if not os.path.exists("../logs"):
 
 def run():
     while True:
+        # Attempt to receive a packet with a timeout of 20 seconds
         packet = rfm9x.receive(keep_listening=True, timeout=20.0, with_header=True)
-        # Optionally change the receive timeout from its default of 0.5 seconds:
-        # packet = rfm9x.receive(timeout=5.0)
-        # If no packet was received during the timeout then None is returned.
-        now = datetime.now()
+        now = datetime.now() # Get the current time
         if packet is None:
-            # Packet has not been received
+            # No packet received
             print(now.strftime("%H:%M:%S"), "|",
                 "Received nothing! Listening again...")
         else:
-            # Received a packet!
-
-            print(now.strftime("%H:%M:%S"), "|",
-                "Received (raw bytes): {0}".format(packet))
-            
-
-            # Packet formate
-            # | 2B - message_id (binary) | message_size (binary) | message (string) | checksum (binary modulo 255) | parita
-            print(packet)
+            # Packet received
+            # 2b - message_id (binary) | 2b - message_size (binary) | message (string) | 1b - checksum (binary modulo 255) | 1b - bitwise parity
+            print()
+            print("Packet:", packet)
             message_id = int.from_bytes(packet[:2], byteorder='big', signed=False)
             message_size = int.from_bytes(packet[2:4], byteorder='big', signed=False)
             message_end = message_size - 2
@@ -75,7 +67,7 @@ def run():
             print("Checksum:", checksum)
             print("Bwp:", bwp)
 
-            # calcule checksum
+            # Calculate checksum
             for i in range(message_end + 1):
                 checksum_local = int(packet[i])
             checksum_local = checksum_local % 256
@@ -85,7 +77,7 @@ def run():
                 print("ERROR: wrong checksum")
                 continue
 
-            # check bwp
+            # Calculate bitwise parity
             bwp_local = 0
             for i in range(message_size - 1):
                 bwp_local = bwp_local ^ packet[i]
@@ -96,7 +88,7 @@ def run():
                 continue
 
 
-            # send ACK
+            # Send ACK
             ack = bytearray(7)
             ack[:2] = packet[:2]
             ack[2] = 0x41 # 'A'
@@ -108,10 +100,9 @@ def run():
             rfm9x.send(bytes(ack))
         
 
-            # save log to file
+            # Save log to file
             pathname = f'../logs/{now.strftime("%Y-%m-%d")}.log'
             data = message.replace("\n\r\x00", "").split(";")
-            print(data)
             json_data = {}
             for i in data:
                 key, value = i.split("=")
@@ -122,10 +113,11 @@ def run():
                 f.write(json.dumps(json_data) + ",\n")
     pass
 
+# Main loop to run the script, restarting if an error occurs
 while True:
     try:
         run()
         break
     except Exception as e:
         print(f"Error occurred: {e}. Restarting the script...")
-        time.sleep(5)  # Optional: wait a few seconds before restarting
+        time.sleep(5)
