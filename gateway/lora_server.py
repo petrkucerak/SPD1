@@ -94,7 +94,19 @@ while True:
             print("ERROR: wrong checksum")
             continue
 
+        # check bwp
+        local_bwp = 0
+        for j in range(8):
+            tmp = 0
+            norm = 0x1
+            for i in range(message_end + 2):
+                if packet[i] & norm: tmp +=1
+            if tmp % 2 == 1:
+                local_bwp += norm
+            norm << norm
+        print("MY", local_bwp)
         local_bwp = bwp
+        print("SOURCE", local_bwp)
 
         # send ACK
         ack = bytearray(7)
