@@ -1,4 +1,4 @@
-import fs, { stat } from "fs";
+import fs from "fs";
 import { isInArea } from "../data/route";
 
 export async function GET(request) {

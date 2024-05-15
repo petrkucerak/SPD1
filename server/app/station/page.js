@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 export default function Page() {
   const [stationData, setStationData] = useState(null);
   const [isLoading, setLoading] = useState(true);
+  const [history, setHistory] = useState(48);
 
   const searchParams = useSearchParams();
   const GE = searchParams.get("GE");
@@ -31,23 +32,40 @@ export default function Page() {
       <span className="font-semibold">
         ({GN}, {GE} ±{accuracy})
       </span>
+      <h2 className="font-semibold mt-4">Počet záznamů</h2>
+      <div>
+        <p>{history}</p>
+        <input
+          type="range"
+          className="w-full range range-primary mb-4"
+          value={history}
+          onChange={(e) => setHistory(e.target.value)}
+          min={24}
+          max={1000}
+        />
+      </div>
       <Graph
         data={stationData}
-        type="Lo"Improve style
+        type="Lo"
+        Improve
+        style
         title={"Světelnost"}
         label={"Světelnost"}
+        lastRecords={history}
       />
       <Graph
         data={stationData}
         type={"Ta Tw"}
         title={"Teplota vzduchu a vody"}
         label={"Teplota"}
+        lastRecords={history}
       />
       <Graph
         data={stationData}
         type="Ma"
         title={"Vlhkost vzduchu"}
         label={"Vlkohst"}
+        lastRecords={history}
       />
     </div>
   );

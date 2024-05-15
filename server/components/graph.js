@@ -7,6 +7,7 @@ import {
   Tooltip,
   PointElement,
   LineElement,
+  Title
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 
@@ -19,10 +20,8 @@ ChartJS.register(
   Tooltip
 );
 
-export default function Graph({ data, type, label, title }) {
+export default function Graph({ data, type, label, title, lastRecords }) {
   ChartJS.register(CategoryScale /* ... */);
-
-  const lastRecords = 48;
 
   return (
     <div>
