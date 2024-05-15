@@ -1,9 +1,9 @@
 import { useMap } from "react-leaflet";
 
-const url = "/api/stations";
-
-export default function Stations() {
+export default function Stations({ accuracy }) {
   const map = useMap();
+
+  const url = `/api/stations?accuracy=${accuracy}`;
 
   fetch(url)
     .then((res) => res.json())
@@ -18,7 +18,7 @@ export default function Stations() {
             <h2 class="card-header">Stanice</h1>
             <p class="text-content2">${station.GN} ${station.GE}</p>
             <div class="card-footer">
-              <a href='/station?GN=${station.GN}&GE=${station.GE}&accuracy=0.001'>
+              <a href='/station?GN=${station.GN}&GE=${station.GE}&accuracy=${accuracy}'>
                 <button class="btn btn-solid-secondary font-semibold">Naměřená data</button>
               </a>
             </div>
@@ -41,7 +41,7 @@ export default function Stations() {
           .addTo(map)
           .bindPopup(statoinPopup)
           .on("click", (e) => {
-            console.log(e); // TODO: remove
+            // console.log(e); // TODO: remove
           });
       });
     })
