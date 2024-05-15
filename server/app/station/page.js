@@ -33,7 +33,7 @@ export default function Page() {
       </span>
       <Graph
         data={stationData}
-        type="Lo"
+        type="Lo"Improve style
         title={"Světelnost"}
         label={"Světelnost"}
       />
