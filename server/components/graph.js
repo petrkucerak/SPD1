@@ -22,7 +22,7 @@ ChartJS.register(
 export default function Graph({ data, type, label, title }) {
   ChartJS.register(CategoryScale /* ... */);
 
-  console.log(data);
+  const lastRecords = 48;
 
   return (
     <div>
@@ -64,13 +64,13 @@ export default function Graph({ data, type, label, title }) {
                   item.time
                 ).getMinutes()}`
             )
-            .slice(-48),
+            .slice(-lastRecords),
 
           datasets: [
             type.includes("Lo")
               ? {
                   label: "Světelnost",
-                  data: data.map((item) => item.Lo).slice(-24),
+                  data: data.map((item) => item.Lo).slice(-lastRecords),
                   backgroundColor: "red",
                   borderColor: "red",
                   fill: true,
@@ -81,7 +81,7 @@ export default function Graph({ data, type, label, title }) {
             type.includes("Tw")
               ? {
                   label: "Teplota vody",
-                  data: data.map((item) => item.Tw).slice(-24),
+                  data: data.map((item) => item.Tw).slice(-lastRecords),
                   backgroundColor: "blue",
                   borderColor: "blue",
                   fill: true,
@@ -92,7 +92,7 @@ export default function Graph({ data, type, label, title }) {
             type.includes("Ta")
               ? {
                   label: "Teplota vzduchu",
-                  data: data.map((item) => item.Ta).slice(-24),
+                  data: data.map((item) => item.Ta).slice(-lastRecords),
                   backgroundColor: "yellow",
                   borderColor: "yellow",
                   fill: true,
@@ -102,8 +102,8 @@ export default function Graph({ data, type, label, title }) {
               : {},
             type.includes("Ma")
               ? {
-                  label: "Teplota vzduchu",
-                  data: data.map((item) => item.Ma).slice(-24),
+                  label: "Vlhkost vzuchu",
+                  data: data.map((item) => item.Ma).slice(-lastRecords),
                   backgroundColor: "violet",
                   borderColor: "violet",
                   fill: true,

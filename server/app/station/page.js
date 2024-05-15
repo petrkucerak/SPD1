@@ -4,12 +4,6 @@ import { base_url } from "@/components/utils";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const getData = async () => {
-  const res = await fetch(`${base_url}/api/data?GN=${GN}&GE=${GE}`);
-  const json = await res.json();
-  return { data: json };
-};
-
 export default function Page() {
   const [stationData, setStationData] = useState(null);
   const [isLoading, setLoading] = useState(true);
@@ -28,8 +22,8 @@ export default function Page() {
       });
   }, []);
 
-  if (isLoading) return <p>Loading...</p>;
-  if (!stationData) return <p>No station data</p>;
+  if (isLoading) return <p>Načítání...</p>;
+  if (!stationData) return <p>Data pro tuto stanici neexistují</p>;
 
   return (
     <div className="w-[90vw] max-w-[800px]">
