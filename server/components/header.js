@@ -9,7 +9,7 @@ export default function Header() {
         </Link>
       </div>
       <div className="navbar-end">
-        <Link href={`/`} className="navbar-item">
+        <Link href={`/diary`} className="navbar-item">
           Deníček
         </Link>
         <Link href={`/map`} className="navbar-item">

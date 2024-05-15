@@ -6,7 +6,7 @@ export default function Home() {
       <Link href="/map">
         <button className="btn btn-solid-primary btn-xl">Stanice</button>
       </Link>
-      <Link href="/">
+      <Link href="/diary">
         <button className="btn btn-solid-secondary btn-xl">Deníček</button>
       </Link>
     </div>
