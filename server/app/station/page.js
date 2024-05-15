@@ -17,9 +17,10 @@ export default function Page() {
   const searchParams = useSearchParams();
   const GE = searchParams.get("GE");
   const GN = searchParams.get("GN");
+  const accuracy = searchParams.get("accuracy");
 
   useEffect(() => {
-    fetch(`${base_url}/api/data?GN=${GN}&GE=${GE}`)
+    fetch(`${base_url}/api/data?GN=${GN}&GE=${GE}&accuracy=${accuracy}`)
       .then((res) => res.json())
       .then((data) => {
         setStationData(data.data);
@@ -34,7 +35,7 @@ export default function Page() {
     <div className="w-[90vw] max-w-[800px]">
       <h1 className="text-2xl font-bold">Stanice</h1>
       <span className="font-semibold">
-        {GN} {GE}
+        ({GN}, {GE} ±{accuracy})
       </span>
       <Graph
         data={stationData}

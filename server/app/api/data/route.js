@@ -1,10 +1,19 @@
 import fs from "fs";
 
+function isInArea(accuracy, GN, GE, p_GN, p_GE) {
+  if (p_GN > GN + accuracy) return false;
+  if (p_GN < GN - accuracy) return false;
+  if (p_GE > GE + accuracy) return false;
+  if (p_GE < GE - accuracy) return false;
+  return true;
+}
+
 export async function GET(request) {
   // load data
   const { searchParams } = new URL(request.url);
-  const GN = searchParams.get("GN");
-  const GE = searchParams.get("GE");
+  const GN = parseFloat(searchParams.get("GN"));
+  const GE = parseFloat(searchParams.get("GE"));
+  const accuracy = parseFloat(searchParams.get("accuracy"));
 
   const path = "../logs";
   const files = fs.readdirSync(path).sort();
@@ -24,7 +33,12 @@ export async function GET(request) {
       // filter data by params
       if (GN !== null && GE !== null) {
         // if is not same as GN and GE skip it
-        if (raw_data[i].GN !== GN || raw_data[i].GE !== GE) continue;
+        if (
+          // parseFloat(raw_data[i].GN) !== GN ||
+          // parseFloat(raw_data[i].GE) !== GE
+          !isInArea(accuracy, GN, GE, raw_data[i].GN, raw_data[i].GE)
+        )
+          continue;
       }
       data.push({
         Tw: parseFloat(raw_data[i].Tw),
