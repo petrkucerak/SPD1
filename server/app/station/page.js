@@ -37,7 +37,7 @@ export default function Page() {
         <p>{history}</p>
         <input
           type="range"
-          className="w-full range range-primary mb-4"
+          className="w-full range range-flat-primary mb-4"
           value={history}
           onChange={(e) => setHistory(e.target.value)}
           min={24}
