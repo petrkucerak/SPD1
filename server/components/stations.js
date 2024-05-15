@@ -18,7 +18,7 @@ export default function Stations() {
             <h2 class="card-header">Stanice</h1>
             <p class="text-content2">${station.GN} ${station.GE}</p>
             <div class="card-footer">
-              <a href='/stations/${station.GN}-${station.GE}'>
+              <a href='/station?GN=${station.GN}&GE=${station.GE}'>
                 <button class="btn btn-solid-secondary font-semibold">Naměřená data</button>
               </a>
             </div>

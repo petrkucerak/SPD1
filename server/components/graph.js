@@ -9,7 +9,6 @@ import {
   LineElement,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import gpsToUtc from "./gps2utc";
 
 // Register ChartJS components using ChartJS.register
 ChartJS.register(
@@ -22,6 +21,8 @@ ChartJS.register(
 
 export default function Graph({ data, type, label, title }) {
   ChartJS.register(CategoryScale /* ... */);
+
+  console.log(data);
 
   return (
     <div>
@@ -50,42 +51,67 @@ export default function Graph({ data, type, label, title }) {
                 display: true,
                 text: label != undefined ? label : "value",
               },
-              suggestedMin: -10,
-              suggestedMax: 200,
             },
           },
         }}
         data={{
           labels: data
-            .map((item) => /*gpsToUtc(item.gps_time)*/ item.gps_time)
-            .slice(-24),
+            .map(
+              (item) =>
+                `${new Date(item.time).getDate()}. ${
+                  new Date(item.time).getMonth() + 1
+                }. ${new Date(item.time).getHours()}:${new Date(
+                  item.time
+                ).getMinutes()}`
+            )
+            .slice(-48),
 
-          datasets:
-            type === "light"
-              ? [
-                  {
-                    label: "Světelnost",
-                    data: data.map((item) => item.Lo).slice(-24),
-                    backgroundColor: "red",
-                    borderColor: "red",
-                    fill: true,
-                    cubicInterpolationMode: "monotone",
-                    tension: 0.4,
-                  },
-                ]
-              : type === "temperature"
-              ? [
-                  {
-                    label: "Teplota vody",
-                    data: data.map((item) => item.Tw).slice(-24),
-                    backgroundColor: "blue",
-                    borderColor: "blue",
-                    fill: true,
-                    cubicInterpolationMode: "monotone",
-                    tension: 0.4,
-                  },
-                ]
-              : [],
+          datasets: [
+            type.includes("Lo")
+              ? {
+                  label: "Světelnost",
+                  data: data.map((item) => item.Lo).slice(-24),
+                  backgroundColor: "red",
+                  borderColor: "red",
+                  fill: true,
+                  cubicInterpolationMode: "monotone",
+                  tension: 0.4,
+                }
+              : {},
+            type.includes("Tw")
+              ? {
+                  label: "Teplota vody",
+                  data: data.map((item) => item.Tw).slice(-24),
+                  backgroundColor: "blue",
+                  borderColor: "blue",
+                  fill: true,
+                  cubicInterpolationMode: "monotone",
+                  tension: 0.4,
+                }
+              : {},
+            type.includes("Ta")
+              ? {
+                  label: "Teplota vzduchu",
+                  data: data.map((item) => item.Ta).slice(-24),
+                  backgroundColor: "yellow",
+                  borderColor: "yellow",
+                  fill: true,
+                  cubicInterpolationMode: "monotone",
+                  tension: 0.4,
+                }
+              : {},
+            type.includes("Ma")
+              ? {
+                  label: "Teplota vzduchu",
+                  data: data.map((item) => item.Ma).slice(-24),
+                  backgroundColor: "violet",
+                  borderColor: "violet",
+                  fill: true,
+                  cubicInterpolationMode: "monotone",
+                  tension: 0.4,
+                }
+              : {},
+          ],
         }}
       />
     </div>
