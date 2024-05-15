@@ -1,6 +1,14 @@
 import fs from "fs";
 import { isInArea } from "../data/route";
 
+function isInSameArea(data, accuracy, GN, GE) {
+  if (data.length === 0) return false;
+  for (let i = 0; i < data.length; i += 1) {
+    if (isInArea(accuracy, data[i].GN, data[i].GE, GN, GE)) return true;
+  }
+  return false;
+}
+
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const accuracy = parseFloat(searchParams.get("accuracy"));
@@ -24,11 +32,22 @@ export async function GET(request) {
         undefined &&
       data.find((station) => station.GE === parseFloat(raw_data[i].GE)) ===
         undefined
-    )
-      data.push({
-        GN: parseFloat(raw_data[i].GN),
-        GE: parseFloat(raw_data[i].GE),
-      });
+    ) {
+      // handle accuracy
+      if (
+        !isInSameArea(
+          data,
+          accuracy,
+          parseFloat(raw_data[i].GN),
+          parseFloat(raw_data[i].GE)
+        )
+      ) {
+        data.push({
+          GN: parseFloat(raw_data[i].GN),
+          GE: parseFloat(raw_data[i].GE),
+        });
+      }
+    }
   }
   return Response.json({ data });
 }
