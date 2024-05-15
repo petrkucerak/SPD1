@@ -1,6 +1,9 @@
-import fs from "fs";
+import fs, { stat } from "fs";
+import { isInArea } from "../data/route";
 
-export async function GET() {
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const accuracy = parseFloat(searchParams.get("accuracy"));
   // load data
   const path = "../logs";
   const files = fs.readdirSync(path).sort();

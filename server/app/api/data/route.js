@@ -1,6 +1,6 @@
 import fs from "fs";
 
-function isInArea(accuracy, GN, GE, p_GN, p_GE) {
+export function isInArea(accuracy, GN, GE, p_GN, p_GE) {
   if (p_GN > GN + accuracy) return false;
   if (p_GN < GN - accuracy) return false;
   if (p_GE > GE + accuracy) return false;
