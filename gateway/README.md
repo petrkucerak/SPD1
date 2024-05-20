@@ -33,7 +33,6 @@ K&mo1234 # password
 Uses https://github.com/adafruit/Adafruit_CircuitPython_RFM9x
 
 ```sh
-mkdir project-name && cd project-name
 python3 -m venv .venv
 source .venv/bin/activate
 pip3 install adafruit-circuitpython-rfm9x
